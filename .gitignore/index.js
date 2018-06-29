@@ -4,7 +4,7 @@ const client = new Discord.Client();
 
 var prefix = "/";
 
-client.login("NDYxNDM1MzAxODAyNTQxMDc4.DhfRGA.3i1AaVnenGu4WZKSGqOUvAgVER4");
+client.login("NDYxNDM1MzAxODAyNTQxMDc4.DhgQuA.Ch1ebEYEpJwrlomAMzuEpAn3qyE");
 
 client.on("ready", () => {
     console.log("bot ready")
@@ -13,17 +13,22 @@ client.on("ready", () => {
 
 client.on('message', message => {
 
-    if(message.content === prefix + "launcher"){
-        var launcher_embed = new Discord.RichEmbed() 
-        .setColor("#000000")
-        .setTitle("Notre Launcher")
-        .setDescription("Voici un lien de téléchargement ou tu poura avoir le launcher !")
-        .addField("https://cdn.discordapp.com/attachments/435422057065480193/459398951406272512/Nosaria.jar")
-        .setFooter("Nosaria Serveur minecraft Faction Vanilla")
-        message.channel.sendMessage(launcher_embed);
-        console.log("launcher link send")
+    if(message.content === prefix + "admin"){
+        var admin_embed = new Discord.RichEmbed()
+        .setColor("#660033")
+        .setTitle("Infos")
+        .setDescription("Information sur le dévelopeur et le serveur !")
+        .addField("/ban", "@pseudo")
+        .addField("/kick", "@pseudo")   
+        .addField("/mute", "@pseudo")
+        .addField("/unmute", "@pseudo (Obligatoirement un personne mute)")
+        .addField("/warn", "@pseudo")
+        .addField("/chanellist", "afichera le nombre de canaux et de catégorie")
+        .setFooter("MultiGaming - Panel-Admin ")
+        message.channel.sendMessage(admin_embed);
+        console.log("admin menu send !") 
     }
-
+    
     if (!message.content.startsWith(prefix)) return;
 
     var args = message.content.substring(prefix.length).split(" ");
@@ -37,12 +42,14 @@ client.on('message', message => {
         var stats_embed = new Discord.RichEmbed()
         
         .setColor("#660033")
-        .setTitle(`Statistiques de cette utilisateur : ${message.author.username}`)
+        .setTitle(`Statistiques utilisateur : ${message.author.username}`)
         .addField(`Client Id :id:`, msgauthor, true)
-        .addField("Création Utilisatur :", userCreateDate[1] + ' ' + userCreateDate[2] + ' '+ userCreateDate[3])
+        .addField("Création en :", userCreateDate[1] + ' ' + userCreateDate[2] + ' '+ userCreateDate[3])
         .setThumbnail(message.author.avatarURL)
-        message.reply("Le message avec tes information vient de t'étre envoyer en priver !")
+        message.reply("Le message avec tes informations vient de t'étre envoyer en priver !")
+        .setFooter("MultiGaming - Public")
         message.author.send({embed: stats_embed});
+        console.log("stats user sens in private")
         break
     }
     if(message.content === prefix + "infos"){
@@ -54,26 +61,25 @@ client.on('message', message => {
         .addField("Id :id:", `${client.user.id}`)   
         .addField("Membres total", message.guild.members.size)
         .addField("Catégorie et Salon", message.guild.channels.size)
-        .setFooter("MultiGaming ")
+        .setFooter("MultiGaming - Public")
         message.channel.sendMessage(infos_embed);
         console.log("infos menu send succefuly !") 
     } 
 
-    if(message.content === prefix + "admininfostats"){
-        var admininfostats_embed = new Discord.RichEmbed()
+    if(message.content === prefix + "adminstats"){
+        var adminstats_embed = new Discord.RichEmbed()
         .setColor("#660033")
         .setTitle("Infos")
         .setDescription("Information sur le dévelopeur et le serveur !")
-        .addField(" :robot: ", `${client.user.tag}`, true)
-        .addField("Id :id:", `${client.user.id}`)   
+        .addField(" :robot: ", `${client.user.tag}`, true) 
         .addField("Membres total", message.guild.members.size)
         .addField("Catégorie et Salon", message.guild.channels.size)
-        .setFooter("MultiGaming - Panel Admin ")
-        message.channel.sendMessage(admininfostats_embed);
+        .setFooter("MultiGaming - Panel-Admin !")
+        message.channel.sendMessage(adminstats_embed);
         console.log("infos menu send succefuly !") 
     }
 
-    if(message.content.startsWith(prefix + "clearmsg")) {
+    if(message.content.startsWith(prefix + "clear")) {
         if(!message.guild.member(message.author).hasPermission("MANAGE_MESSAGES")) return message.channel.send("Vous n'avez pas la permission !");
 
         let args = message.content.split(" ").slice(1);
@@ -134,7 +140,7 @@ client.on('message', message => {
  
         if(!message.guild.member(client.user).hasPermission("ADMINISTRATOR")) return message.channel.send("Je n'ai pas la permission !");
         message.channel.overwritePermissions(mute, { SEND_MESSAGES: false}).then(member => {
-            message.channel.send(`${mute.user.username} est mute par ${message.author.username} !`);
+            message.channel.send(`${mute.user.username} est à été mute!`);
         })
     }
 
