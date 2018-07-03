@@ -13,11 +13,11 @@ client.on("ready", () => {
 
 client.on('message', message => {
 
-    if(message.content === prefix + "admin"){
+    if(message.content === prefix + "cmdsadmin"){
         var admin_embed = new Discord.RichEmbed()
         .setColor("#660033")
-        .setTitle("Infos")
-        .setDescription("Information sur le dévelopeur et le serveur !")
+        .setTitle("commandes modération")
+        .setDescription("Admin cmds!")
         .addField("/ban", "@pseudo")
         .addField("/kick", "@pseudo")   
         .addField("/mute", "@pseudo")
@@ -28,7 +28,7 @@ client.on('message', message => {
         message.channel.sendMessage(admin_embed);
         console.log("admin menu send !") 
     }
-    
+
     if (!message.content.startsWith(prefix)) return;
 
     var args = message.content.substring(prefix.length).split(" ");
@@ -140,7 +140,25 @@ client.on('message', message => {
  
         if(!message.guild.member(client.user).hasPermission("ADMINISTRATOR")) return message.channel.send("Je n'ai pas la permission !");
         message.channel.overwritePermissions(mute, { SEND_MESSAGES: false}).then(member => {
-            message.channel.send(`${mute.user.username} est à été mute!`);
+            message.channel.send(`${mute.user.username} est mute par ${message.author.username} !`);
+        })
+    }
+
+    if(message.content.startsWith(prefix + "unmute")) {
+        if(!message.guild.member(message.author).hasPermission("ADMINISTRATOR")) return message.channel.send("Vous n'avez pas la permission !");
+ 
+        if(message.mentions.users.size === 0) {
+            return message.channel.send('Vous devez mentionner un utilisateur !');
+        }
+ 
+        var mute = message.guild.member(message.mentions.users.first());
+        if(!mute) {
+            return message.channel.send("Je n'ai pas trouvé l'utilisateur ou il l'existe pas !");
+        }
+ 
+        if(!message.guild.member(client.user).hasPermission("ADMINISTRATOR")) return message.channel.send("Je n'ai pas la permission !");
+        message.channel.overwritePermissions(mute, { SEND_MESSAGES: true}).then(member => {
+            message.channel.send(`${mute.user.username} est un-mute par ${message.author.username} !`);
         })
     }
 
